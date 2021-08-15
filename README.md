@@ -2,7 +2,7 @@
 
 ## Description
 
-To-do-list with all CRUD operations using local storage. This
+A To-do-list with create, read, update, delete (CRUD) operations using local storage.
 
 #### Technologies
 
@@ -28,34 +28,26 @@ To-do-list with all CRUD operations using local storage. This
 1. Clone the project
 
 ```
-
-https://github.com/VivianLin61/To-Do-List.git
-
+git clone https://github.com/VivianLin61/To-Do-List.git
 ```
 
 2. Install ionic
 
 ```
-
 npm install -g @ionic/cli
-
 ```
 
 2. `cd` into project directory and install dependencies
 
 ```
-
 cd To-Do-List
 npm install
-
 ```
 
 3. Run the App
 
 ```
-
 ionic serve
-
 ```
 
 4. Open http://localhost:8100 to view it in the browser.
