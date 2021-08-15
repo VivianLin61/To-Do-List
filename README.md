@@ -4,6 +4,9 @@
 
 A To-do-list with create, read, update, delete (CRUD) operations using local storage.
 
+## Project Demo
+![pxPzsUOnBN](https://user-images.githubusercontent.com/33815743/129495200-5dd5fbf9-5719-4daa-ba3f-c25fb9e938d0.gif)
+
 #### Technologies
 
 - Ionic 5
