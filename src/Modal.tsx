@@ -9,6 +9,10 @@ import {
   IonInput,
   IonButton,
   IonModal,
+  IonTextarea,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from '@ionic/react'
 
 const Modal: React.FunctionComponent<any> = ({
@@ -24,42 +28,55 @@ const Modal: React.FunctionComponent<any> = ({
     <>
       <IonModal isOpen={isOpen}>
         <IonHeader>
-          <IonToolbar color='primary'>
-            <IonTitle>My Modal</IonTitle>
+          <IonToolbar className='title-headbar'>
+            <IonTitle>Edit Task</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent className='ion-padding'>
-          <IonItem>
-            <IonLabel>Edit Task</IonLabel>
-            <IonInput
-              value={updateTask}
-              onIonChange={(e) => {
-                setUpdateTask(e.detail.value)
-              }}
-            ></IonInput>
-          </IonItem>
-          <IonButton
-            onClick={() =>
-              onClose({
-                cancelled: false,
-                data: {
-                  newTask: {
-                    task: updateTask,
-                    completed: initialTask.completed,
-                    token: initialTask.token,
-                  },
-                },
-              })
-            }
-          >
-            Submit
-          </IonButton>
-          <IonButton
-            color='danger'
-            onClick={() => onClose({ cancelled: true, data: null })}
-          >
-            Cancel
-          </IonButton>
+        <IonContent>
+          <IonGrid>
+            <IonItem lines='none'>
+              <IonRow className='ion-justify-content-center ion-padding-top'>
+                <IonTextarea
+                  wrap='soft'
+                  value={updateTask}
+                  onIonChange={(e) => {
+                    setUpdateTask(e.detail.value)
+                  }}
+                ></IonTextarea>
+              </IonRow>
+            </IonItem>
+            <IonGrid>
+              <IonRow>
+                <IonCol>
+                  <IonButton
+                    color='success'
+                    expand='block'
+                    onClick={() =>
+                      onClose({
+                        cancelled: false,
+                        newTask: {
+                          task: updateTask,
+                          completed: initialTask.completed,
+                          token: initialTask.token,
+                        },
+                      })
+                    }
+                  >
+                    Save
+                  </IonButton>
+                </IonCol>
+                <IonCol>
+                  <IonButton
+                    expand='block'
+                    color='danger'
+                    onClick={() => onClose({ cancelled: true, newTask: null })}
+                  >
+                    Cancel
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </IonGrid>
         </IonContent>
       </IonModal>
     </>

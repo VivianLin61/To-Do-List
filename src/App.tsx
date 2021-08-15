@@ -9,7 +9,6 @@ import {
   IonButton,
   IonIcon,
   IonList,
-  IonModal,
 } from '@ionic/react'
 import { create, add, trash, squareOutline, checkbox } from 'ionicons/icons'
 
@@ -43,6 +42,7 @@ type Task = {
 const App: React.FC = () => {
   const [task, setTask] = useState('')
   const taskListJson = localStorage.getItem('tasks')
+  //initialize tasklist by the key 'tasks' from localstorage. if taskListJson is null use empty array
   const [taskList, setTaskList] = useState(
     taskListJson ? JSON.parse(taskListJson) : []
   )
@@ -57,40 +57,27 @@ const App: React.FC = () => {
       initialTask: { task: '', completed: false, token: '' },
     })
 
-    if (!response.cancelled) editTask(response.data.newTask)
+    if (!response.cancelled) editTask(response.newTask)
   }
 
+  //create task
   const addTask = () => {
     const newTask = {
       task,
       completed: false,
       token: getToken(),
     }
+    //append task
     const updatedList = [...taskList, newTask]
     setTaskList(updatedList)
+    setTask('')
     localStorage.setItem('tasks', JSON.stringify(updatedList))
   }
-
-  const getToken = () => {
-    return (
-      Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15)
-    )
-  }
-
-  const getIndexByToken = (token: string) => {
-    for (let i = 0; i < taskList.length; i++) {
-      if (taskList[i].token === token) {
-        return i
-      }
-    }
-
-    return -1
-  }
+  //edit tasks
   const editTask = (t: Task) => {
-    console.log(t)
     let index = getIndexByToken(t.token)
     if (index !== -1) {
+      //create dummy list object to update task name
       const updatedList = {
         ...taskList,
         [index]: {
@@ -98,15 +85,15 @@ const App: React.FC = () => {
           task: t.task,
         },
       }
-
-      setTaskList(Object.keys(updatedList).map((key) => updatedList[key]))
-      localStorage.setItem('tasks', JSON.stringify(taskList))
+      //convert list of task objects to an array
+      const result = Object.keys(updatedList).map((key) => updatedList[key])
+      setTaskList(result)
+      localStorage.setItem('tasks', JSON.stringify(result))
     }
   }
 
   const deleteTask = (t: Task) => {
     let index = getIndexByToken(t.token)
-    console.log(taskList)
     if (index !== -1) {
       const updatedList = [...taskList]
       updatedList.splice(index, 1)
@@ -124,27 +111,46 @@ const App: React.FC = () => {
           completed: !t.completed,
         },
       }
-      setTaskList(Object.keys(updatedList).map((key) => updatedList[key]))
-      localStorage.setItem('tasks', JSON.stringify(taskList))
+      const result = Object.keys(updatedList).map((key) => updatedList[key])
+      setTaskList(result)
+      localStorage.setItem('tasks', JSON.stringify(result))
     }
+  }
+
+  const getToken = () => {
+    return (
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15)
+    )
+  }
+
+  const getIndexByToken = (token: string) => {
+    for (let i = 0; i < taskList.length; i++) {
+      if (taskList[i].token === token) {
+        return i
+      }
+    }
+    return -1
   }
   return (
     <IonApp>
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar className='title-headbar'>
           <IonTitle>My To Do List</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonItem>
+        <IonItem lines='none' className='addTask'>
           <IonInput
+            className='taskInput'
             type='text'
             placeholder='Enter task'
             value={task}
             onIonInput={(e: any) => setTask(e.target.value)}
           ></IonInput>
           <div className='item-note'>
-            <IonButton color='primary' onClick={addTask}>
+            <IonButton color='success' onClick={addTask}>
+              Add to List
               <IonIcon icon={add}></IonIcon>
             </IonButton>
           </div>
@@ -152,7 +158,7 @@ const App: React.FC = () => {
         <IonList>
           {taskList &&
             taskList.map((t: Task, i: number) => (
-              <IonItem key={i}>
+              <IonItem key={i} className={t.completed ? 'strike' : ''}>
                 <div>
                   <IonIcon
                     icon={t.completed ? checkbox : squareOutline}
@@ -165,27 +171,12 @@ const App: React.FC = () => {
 
                 <div className='item-note' slot='end'>
                   <IonButton
-                    color='primary'
+                    color='success'
                     onClick={() => {
-                      // setMyModal({
-                      //   isOpen: true,
-                      //   initialTask: {
-                      //     task: t.task,
-                      //     completed: t.completed,
-                      //     token: t.token,
-                      //   },
-                      // })
-                      setMyModal((prevMyModal) => ({
-                        ...prevMyModal,
+                      setMyModal({
                         isOpen: true,
-                        initialTask: {
-                          ...prevMyModal.initialTask,
-                          task: t.task,
-                          completed: t.completed,
-                          token: t.token,
-                        },
-                      }))
-                      // editTask(t)
+                        initialTask: t,
+                      })
                     }}
                   >
                     <IonIcon icon={create}></IonIcon>

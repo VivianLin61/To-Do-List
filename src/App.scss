@@ -1,0 +1,46 @@
+.title-headbar {
+  --background: #6236ff;
+  color: white;
+}
+
+ion-col {
+  height: 100%;
+  ion-input {
+    border: solid 2px black;
+    min-height: 320px;
+    border-radius: 10px;
+  }
+}
+.addTask {
+  padding-top: 15px;
+  ion-button {
+    height: 3em;
+  }
+}
+
+ion-input {
+  border: solid 2px black;
+  border-radius: 10px;
+}
+ion-input {
+  --padding-start: 10px !important;
+}
+ion-row {
+  width: 100%;
+  ion-textarea {
+    border: solid 2px black;
+    padding: 10px;
+    min-height: 320px;
+    border-radius: 10px;
+  }
+}
+
+ion-list {
+  .strike::part(native) {
+    text-decoration: line-through;
+    background-color: gray !important;
+  }
+  ion-item:nth-child(odd)::part(native) {
+    background-color: #e3dcdc;
+  }
+}
